@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#EDD9C4"/>
+  <!-- Far left petal -->
+  <ellipse cx="8" cy="19" rx="5" ry="7" transform="rotate(-40 8 19)" fill="#9B6040" opacity="0.75"/>
+  <!-- Far right petal -->
+  <ellipse cx="24" cy="19" rx="5" ry="7" transform="rotate(40 24 19)" fill="#9B6040" opacity="0.75"/>
+  <!-- Left petal -->
+  <ellipse cx="11" cy="17" rx="5" ry="9" transform="rotate(-20 11 17)" fill="#7A3D20"/>
+  <!-- Right petal -->
+  <ellipse cx="21" cy="17" rx="5" ry="9" transform="rotate(20 21 17)" fill="#7A3D20"/>
+  <!-- Center petal -->
+  <ellipse cx="16" cy="15" rx="5" ry="10" fill="#5C2D0E"/>
+  <!-- Water base -->
+  <ellipse cx="16" cy="25" rx="8" ry="2" fill="#5C2D0E" opacity="0.3"/>
+</svg>

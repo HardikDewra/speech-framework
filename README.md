@@ -5,6 +5,8 @@ An interactive React component based on the **Abhaya Sutta (Majjhima Nikaya 58)*
 ![Buddhist speech framework](https://img.shields.io/badge/source-Abhaya%20Sutta%20MN%2058-8B5E3C?style=flat-square)
 ![React](https://img.shields.io/badge/React-18%2B-61DAFB?style=flat-square&logo=react)
 
+**Live demo: [hardikdewra.github.io/speech-framework](https://hardikdewra.github.io/speech-framework/)**
+
 ## What It Does
 
 Before speaking, the Tathagata passes each word through five qualities:
