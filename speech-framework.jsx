@@ -70,7 +70,7 @@ const results = {
     bg: "rgba(46, 125, 50, 0.08)",
     border: "rgba(46, 125, 50, 0.25)",
     message: "All five gates are open.",
-    sub: "Even now, the Tathagata waits for the right moment. Because the Tathagata has sympathy for living beings.",
+    sub: "Even now, the Tathagata waits for the right moment. Because the Tathagata has compassion for living beings.",
     symbol: "✦",
   },
 };
@@ -234,7 +234,7 @@ export default function SpeechFramework() {
             }}
           >
             "Why does the Tathagata exercise a sense of time? Because the
-            Tathagata has sympathy for living beings."
+            Tathagata has compassion for living beings."
           </p>
         </div>
 

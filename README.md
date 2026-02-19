@@ -57,7 +57,7 @@ These are the six cases laid out in the sutta, verbatim:
 
 The key insight: only cases 3 and 6 result in speaking - and even then, only at the right time. Case 4 is easy to miss: something that feels good to say but is untrue is still silence.
 
-> *"Why does the Tathagata exercise a sense of time? Because the Tathagata has sympathy for living beings."*
+> *"Why does the Tathagata exercise a sense of time? Because the Tathagata has compassion for living beings."*
 > — Abhaya Sutta, MN 58
 
 ## Source
@@ -66,7 +66,7 @@ The key insight: only cases 3 and 6 result in speaking - and even then, only at 
 
 The sutta records a conversation between Prince Abhaya and the Buddha. Abhaya was sent by a rival teacher to trap the Buddha with a two-horned question: "Does the Tathagata say words that are unendearing to others?" Either answer would box him in.
 
-The Buddha's response doesn't fit either horn - he lays out six specific cases that show when he speaks and when he doesn't. The principle: truth and benefit are non-negotiable. Pleasantness alone is never a reason to speak. And even when all conditions are met, he still waits for the right moment - out of sympathy, not strategy.
+The Buddha's response doesn't fit either horn - he lays out six specific cases that show when he speaks and when he doesn't. The principle: truth and benefit are non-negotiable. Pleasantness alone is never a reason to speak. And even when all conditions are met, he still waits for the right moment - out of compassion, not strategy.
 
 ## License
 
