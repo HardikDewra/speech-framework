@@ -1,4 +1,4 @@
-# Before You Speak
+# Buddha's 5 Gates of Speech - A Framework for Mindful Speaking
 
 An interactive React component based on the **Abhaya Sutta (Majjhima Nikaya 58)** - the Buddha's five-gate framework for deciding whether, when, and how to speak.
 
