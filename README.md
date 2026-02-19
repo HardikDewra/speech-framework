@@ -44,22 +44,29 @@ No dependencies beyond React itself.
 
 ## The Decision Matrix
 
-| Qualities | Action |
-|---|---|
-| Untrue | Does not speak |
-| True + factual, but unbeneficial | Does not speak |
-| True + factual + beneficial, but unwelcome | Speaks with right timing |
-| True + factual + unbeneficial, but endearing | Does not speak |
-| All five present | Speaks with right timing |
+These are the six cases laid out in the sutta, verbatim:
 
-> *"Why does the Tathagata exercise a sense of time? Because the Tathagata has compassion for all living beings."*
+| # | True & Factual | Beneficial | Endearing & Agreeable | Action |
+|---|---|---|---|---|
+| 1 | No | No | No | Does not speak |
+| 2 | Yes | No | No | Does not speak |
+| 3 | Yes | Yes | No | Speaks with right timing |
+| 4 | No | No | Yes | Does not speak |
+| 5 | Yes | No | Yes | Does not speak |
+| 6 | Yes | Yes | Yes | Speaks with right timing |
+
+The key insight: only cases 3 and 6 result in speaking - and even then, only at the right time. Case 4 is easy to miss: something that feels good to say but is untrue is still silence.
+
+> *"Why does the Tathagata exercise a sense of time? Because the Tathagata has sympathy for living beings."*
 > — Abhaya Sutta, MN 58
 
 ## Source
 
 **Abhaya Sutta · Majjhima Nikaya 58**
 
-The sutta records a conversation between the Buddha and Prince Abhaya, in which the Buddha explains the five qualities he considers before speaking any word - and why even true, beneficial words are held back until the right moment.
+The sutta records a conversation between Prince Abhaya and the Buddha. Abhaya was sent by a rival teacher to trap the Buddha with a two-horned question: "Does the Tathagata say words that are unendearing to others?" Either answer would box him in.
+
+The Buddha's response doesn't fit either horn - he lays out six specific cases that show when he speaks and when he doesn't. The principle: truth and benefit are non-negotiable. Pleasantness alone is never a reason to speak. And even when all conditions are met, he still waits for the right moment - out of sympathy, not strategy.
 
 ## License
 
