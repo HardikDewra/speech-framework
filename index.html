@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Before You Speak</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #FAF6F0; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" data-presets="react">
+      const { useState } = React;
+
+      const gates = [
+        {
+          id: "truth",
+          question: "Is it True & Factual?",
+          description: "Not assumption, not hearsay, not gossip. Can you verify this?",
+          yesNext: "beneficial",
+          noResult: "silence",
+          noMessage: "The Tathagata does not say such words.",
+          icon: "◎",
+        },
+        {
+          id: "beneficial",
+          question: "Is it Beneficial?",
+          description: "Will the other person gain insight, growth, or help from hearing this?",
+          yesNext: "endearing",
+          noNext: "endearing_unbeneficial",
+          icon: "◈",
+        },
+        {
+          id: "endearing",
+          question: "Is it Endearing & Agreeable?",
+          description: "Does the person want to hear it? Will they receive it well?",
+          yesResult: "timing_all",
+          noResult: "timing_hard",
+          icon: "◇",
+        },
+        {
+          id: "endearing_unbeneficial",
+          question: "Is it Endearing & Agreeable?",
+          description: "The person may love hearing it, but it won't help them right now.",
+          yesResult: "silence_sweet",
+          noResult: "silence",
+          icon: "◇",
+        },
+      ];
+
+      const results = {
+        silence: {
+          verdict: "Noble Silence",
+          color: "#8B5E3C",
+          bg: "rgba(139, 94, 60, 0.08)",
+          border: "rgba(139, 94, 60, 0.25)",
+          message: "The Tathagata does not say such words.",
+          sub: "Let it pass. Not every thought deserves a voice.",
+          symbol: "🪷",
+        },
+        silence_sweet: {
+          verdict: "Noble Silence",
+          color: "#8B5E3C",
+          bg: "rgba(139, 94, 60, 0.08)",
+          border: "rgba(139, 94, 60, 0.25)",
+          message: "True, agreeable, but not beneficial right now.",
+          sub: "Like praising the archer mid-aim. Sweet words that distract are still a disservice.",
+          symbol: "🪷",
+        },
+        timing_hard: {
+          verdict: "Speak - But Wait for the Right Moment",
+          color: "#B8860B",
+          bg: "rgba(184, 134, 11, 0.08)",
+          border: "rgba(184, 134, 11, 0.25)",
+          message: "True, factual, beneficial - but hard to hear.",
+          sub: "The Tathagata has a proper sense of time. Wait until the person is rested, receptive, and in a safe space to receive it.",
+          symbol: "⏳",
+        },
+        timing_all: {
+          verdict: "Speak - With Right Timing",
+          color: "#2E7D32",
+          bg: "rgba(46, 125, 50, 0.08)",
+          border: "rgba(46, 125, 50, 0.25)",
+          message: "All five gates are open.",
+          sub: "Even now, the Tathagata waits for the right moment. Because the Tathagata has compassion for living beings.",
+          symbol: "✦",
+        },
+      };
+
+      const examples = [
+        { label: "Telling someone they're short", path: ["yes", "no", "no"], result: "silence" },
+        { label: "Praising an archer mid-competition", path: ["yes", "no", "yes"], result: "silence_sweet" },
+        { label: "Telling your child to study harder at a party", path: ["yes", "yes", "no"], result: "timing_hard" },
+        { label: "Encouraging a friend who asks for advice", path: ["yes", "yes", "yes"], result: "timing_all" },
+        { label: "Spreading unverified gossip", path: ["no"], result: "silence" },
+      ];
+
+      function SpeechFramework() {
+        const [currentGate, setCurrentGate] = useState(null);
+        const [path, setPath] = useState([]);
+        const [result, setResult] = useState(null);
+        const [showExample, setShowExample] = useState(null);
+        const [animating, setAnimating] = useState(false);
+
+        const startJourney = () => {
+          setCurrentGate("truth");
+          setPath([]);
+          setResult(null);
+          setShowExample(null);
+          setAnimating(true);
+          setTimeout(() => setAnimating(false), 400);
+        };
+
+        const handleAnswer = (answer) => {
+          const gate = gates.find((g) => g.id === currentGate);
+          if (!gate) return;
+
+          const newPath = [...path, { gate: gate.id, answer }];
+          setPath(newPath);
+          setAnimating(true);
+
+          setTimeout(() => {
+            if (answer === "yes") {
+              if (gate.yesResult) {
+                setResult(gate.yesResult);
+                setCurrentGate(null);
+              } else if (gate.yesNext) {
+                setCurrentGate(gate.yesNext);
+              }
+            } else {
+              if (gate.noResult) {
+                setResult(gate.noResult);
+                setCurrentGate(null);
+              } else if (gate.noNext) {
+                setCurrentGate(gate.noNext);
+              }
+            }
+            setAnimating(false);
+          }, 300);
+        };
+
+        const runExample = (ex) => {
+          setShowExample(ex);
+          setCurrentGate(null);
+          setPath([]);
+          setResult(ex.result);
+        };
+
+        const activeResult = result ? results[result] : null;
+        const currentGateData = gates.find((g) => g.id === currentGate);
+
+        return (
+          <div style={{ minHeight: "100vh", background: "#FAF6F0", fontFamily: "'Martina Plantijn', 'Georgia', serif", color: "#2C1810", padding: "0", overflow: "hidden" }}>
+            <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse at 50% 0%, rgba(184, 134, 11, 0.06) 0%, transparent 70%)", pointerEvents: "none", zIndex: 0 }} />
+            <div style={{ maxWidth: 640, margin: "0 auto", padding: "48px 24px 80px", position: "relative", zIndex: 1 }}>
+
+              {/* Header */}
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ fontSize: 13, letterSpacing: "0.25em", textTransform: "uppercase", color: "#8B7355", marginBottom: 16, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif" }}>
+                  Abhaya Sutta - The Five Gates
+                </div>
+                <h1 style={{ fontSize: 36, fontWeight: 400, lineHeight: 1.2, margin: "0 0 12px", color: "#2C1810" }}>Before You Speak</h1>
+                <div style={{ width: 40, height: 1, background: "#B8860B", margin: "20px auto", opacity: 0.5 }} />
+                <p style={{ fontSize: 15, color: "#7A6B5D", lineHeight: 1.7, maxWidth: 440, margin: "0 auto", fontStyle: "italic" }}>
+                  "Why does the Tathagata exercise a sense of time? Because the Tathagata has compassion for living beings."
+                </p>
+              </div>
+
+              {/* Static Framework Overview */}
+              <div style={{ marginBottom: 48, background: "white", borderRadius: 16, padding: "32px 28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", border: "1px solid rgba(139, 94, 60, 0.1)" }}>
+                <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B7355", marginBottom: 24, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif" }}>
+                  The Five Qualities
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {[
+                    { num: "01", label: "True", desc: "Not assumption or imagination" },
+                    { num: "02", label: "Factual", desc: "Verifiable, not hearsay" },
+                    { num: "03", label: "Beneficial", desc: "Will it help the person?" },
+                    { num: "04", label: "Endearing", desc: "Is it welcome to hear?" },
+                    { num: "05", label: "Agreeable", desc: "Does the person accept it?" },
+                  ].map((item) => (
+                    <div key={item.num} style={{ display: "flex", alignItems: "baseline", gap: 16, padding: "10px 0", borderBottom: "1px solid rgba(139, 94, 60, 0.06)" }}>
+                      <span style={{ fontSize: 11, color: "#B8860B", fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", fontWeight: 500, minWidth: 20 }}>{item.num}</span>
+                      <span style={{ fontSize: 17, fontWeight: 600, minWidth: 100 }}>{item.label}</span>
+                      <span style={{ fontSize: 14, color: "#8B7355" }}>{item.desc}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Decision Matrix */}
+                <div style={{ marginTop: 32 }}>
+                  <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B7355", marginBottom: 16, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif" }}>
+                    The Tathagata's Decision Matrix
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    {[
+                      { combo: "✗ ✗ ✗ ✗ ✗", labels: "Untrue, unfactual, unbeneficial, unendearing, disagreeable", action: "Does not speak", actionColor: "#8B5E3C" },
+                      { combo: "✗ ✗ ✗ ✓ ✓", labels: "Untrue, unfactual, unbeneficial, but endearing, agreeable", action: "Does not speak", actionColor: "#8B5E3C" },
+                      { combo: "✓ ✓ ✗ ✗ ✗", labels: "True, factual, unbeneficial, unendearing, disagreeable", action: "Does not speak", actionColor: "#8B5E3C" },
+                      { combo: "✓ ✓ ✓ ✗ ✗", labels: "True, factual, beneficial, unendearing, disagreeable", action: "Speaks with right timing", actionColor: "#B8860B" },
+                      { combo: "✓ ✓ ✗ ✓ ✓", labels: "True, factual, unbeneficial, endearing, agreeable", action: "Does not speak", actionColor: "#8B5E3C" },
+                      { combo: "✓ ✓ ✓ ✓ ✓", labels: "True, factual, beneficial, endearing, agreeable", action: "Speaks with right timing", actionColor: "#2E7D32" },
+                    ].map((row, i) => (
+                      <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 16px", background: i % 2 === 0 ? "rgba(139, 94, 60, 0.03)" : "transparent", borderRadius: 8, gap: 12, flexWrap: "wrap" }}>
+                        <div style={{ flex: 1, minWidth: 200 }}>
+                          <div style={{ fontSize: 13, color: "#5A4A3A", lineHeight: 1.5 }}>{row.labels}</div>
+                        </div>
+                        <div style={{ fontSize: 12, fontWeight: 600, color: row.actionColor, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", textTransform: "uppercase", letterSpacing: "0.1em", whiteSpace: "nowrap" }}>
+                          {row.action}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Interactive Section */}
+              <div style={{ background: "white", borderRadius: 16, padding: "32px 28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", border: "1px solid rgba(139, 94, 60, 0.1)", marginBottom: 32 }}>
+                <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B7355", marginBottom: 24, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif" }}>
+                  Walk Through the Gates
+                </div>
+
+                {!currentGate && !result && (
+                  <div style={{ textAlign: "center", padding: "20px 0" }}>
+                    <p style={{ fontSize: 15, color: "#7A6B5D", marginBottom: 28, lineHeight: 1.7 }}>
+                      Think of something you're about to say to someone. Then walk through the Tathagata's gates.
+                    </p>
+                    <button onClick={startJourney} style={{ background: "#2C1810", color: "#FAF6F0", border: "none", padding: "14px 36px", borderRadius: 100, fontSize: 14, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", letterSpacing: "0.1em", cursor: "pointer", transition: "all 0.2s ease" }}
+                      onMouseEnter={(e) => { e.target.style.background = "#4A3428"; }}
+                      onMouseLeave={(e) => { e.target.style.background = "#2C1810"; }}>
+                      Begin
+                    </button>
+                  </div>
+                )}
+
+                {currentGateData && (
+                  <div style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(10px)" : "translateY(0)", transition: "all 0.3s ease" }}>
+                    <div style={{ display: "flex", gap: 6, marginBottom: 32, justifyContent: "center" }}>
+                      {["truth", "beneficial", "endearing"].map((g) => (
+                        <div key={g} style={{ width: 32, height: 3, borderRadius: 2, background: path.find((p) => p.gate === g) || currentGate === g || currentGate === "endearing_unbeneficial" ? "#B8860B" : "rgba(139, 94, 60, 0.15)", transition: "background 0.3s ease" }} />
+                      ))}
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <div style={{ fontSize: 40, marginBottom: 16, opacity: 0.7 }}>{currentGateData.icon}</div>
+                      <h2 style={{ fontSize: 24, fontWeight: 400, margin: "0 0 12px" }}>{currentGateData.question}</h2>
+                      <p style={{ fontSize: 14, color: "#8B7355", marginBottom: 32, lineHeight: 1.6 }}>{currentGateData.description}</p>
+                      <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                        <button onClick={() => handleAnswer("yes")} style={{ background: "rgba(46, 125, 50, 0.08)", color: "#2E7D32", border: "1px solid rgba(46, 125, 50, 0.2)", padding: "12px 32px", borderRadius: 100, fontSize: 14, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", fontWeight: 500, cursor: "pointer", transition: "all 0.2s ease" }}
+                          onMouseEnter={(e) => { e.target.style.background = "rgba(46, 125, 50, 0.15)"; }}
+                          onMouseLeave={(e) => { e.target.style.background = "rgba(46, 125, 50, 0.08)"; }}>
+                          Yes
+                        </button>
+                        <button onClick={() => handleAnswer("no")} style={{ background: "rgba(139, 94, 60, 0.08)", color: "#8B5E3C", border: "1px solid rgba(139, 94, 60, 0.2)", padding: "12px 32px", borderRadius: 100, fontSize: 14, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", fontWeight: 500, cursor: "pointer", transition: "all 0.2s ease" }}
+                          onMouseEnter={(e) => { e.target.style.background = "rgba(139, 94, 60, 0.15)"; }}
+                          onMouseLeave={(e) => { e.target.style.background = "rgba(139, 94, 60, 0.08)"; }}>
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeResult && (
+                  <div style={{ opacity: animating ? 0 : 1, transform: animating ? "translateY(10px)" : "translateY(0)", transition: "all 0.4s ease" }}>
+                    <div style={{ background: activeResult.bg, border: `1px solid ${activeResult.border}`, borderRadius: 12, padding: "28px 24px", textAlign: "center" }}>
+                      <div style={{ fontSize: 36, marginBottom: 12 }}>{activeResult.symbol}</div>
+                      <h3 style={{ fontSize: 20, fontWeight: 600, color: activeResult.color, margin: "0 0 8px" }}>{activeResult.verdict}</h3>
+                      <p style={{ fontSize: 15, color: "#5A4A3A", margin: "0 0 8px", fontWeight: 500 }}>{activeResult.message}</p>
+                      <p style={{ fontSize: 13, color: "#8B7355", margin: 0, lineHeight: 1.6, fontStyle: "italic" }}>{activeResult.sub}</p>
+                    </div>
+                    {showExample && (
+                      <div style={{ textAlign: "center", marginTop: 16, fontSize: 13, color: "#8B7355" }}>
+                        Example: "{showExample.label}"
+                      </div>
+                    )}
+                    <div style={{ textAlign: "center", marginTop: 24 }}>
+                      <button onClick={startJourney} style={{ background: "transparent", color: "#8B7355", border: "1px solid rgba(139, 94, 60, 0.2)", padding: "10px 28px", borderRadius: 100, fontSize: 13, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", cursor: "pointer", transition: "all 0.2s ease" }}
+                        onMouseEnter={(e) => { e.target.style.borderColor = "rgba(139, 94, 60, 0.4)"; }}
+                        onMouseLeave={(e) => { e.target.style.borderColor = "rgba(139, 94, 60, 0.2)"; }}>
+                        Try Again
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Examples */}
+              <div style={{ background: "white", borderRadius: 16, padding: "32px 28px", boxShadow: "0 1px 3px rgba(0,0,0,0.04)", border: "1px solid rgba(139, 94, 60, 0.1)" }}>
+                <div style={{ fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: "#8B7355", marginBottom: 20, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif" }}>
+                  Examples from the Sutta
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {examples.map((ex, i) => (
+                    <button key={i} onClick={() => runExample(ex)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", background: showExample === ex ? "rgba(184, 134, 11, 0.08)" : "rgba(139, 94, 60, 0.03)", border: showExample === ex ? "1px solid rgba(184, 134, 11, 0.2)" : "1px solid transparent", borderRadius: 10, cursor: "pointer", textAlign: "left", fontFamily: "'Martina Plantijn', Georgia, serif", fontSize: 14, color: "#2C1810", transition: "all 0.2s ease", width: "100%" }}
+                      onMouseEnter={(e) => { if (showExample !== ex) e.currentTarget.style.background = "rgba(139, 94, 60, 0.06)"; }}
+                      onMouseLeave={(e) => { if (showExample !== ex) e.currentTarget.style.background = "rgba(139, 94, 60, 0.03)"; }}>
+                      <span>{ex.label}</span>
+                      <span style={{ fontSize: 11, color: ex.result === "silence" || ex.result === "silence_sweet" ? "#8B5E3C" : ex.result === "timing_hard" ? "#B8860B" : "#2E7D32", fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                        {ex.result === "silence" || ex.result === "silence_sweet" ? "Silence" : "Right timing"}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div style={{ textAlign: "center", marginTop: 48, padding: "0 20px" }}>
+                <div style={{ width: 24, height: 1, background: "#B8860B", margin: "0 auto 20px", opacity: 0.3 }} />
+                <p style={{ fontSize: 13, color: "#A0937D", lineHeight: 1.8, fontStyle: "italic" }}>
+                  In any case, it helps to take a pause, step back for a moment, and reflect - is this what I want to say?
+                </p>
+                <p style={{ fontSize: 11, color: "#B8A990", marginTop: 12, fontFamily: "'Haffer', 'Helvetica Neue', sans-serif", letterSpacing: "0.15em" }}>
+                  ABHAYA SUTTA · MAJJHIMA NIKAYA 58
+                </p>
+              </div>
+
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<SpeechFramework />);
+    </script>
+  </body>
+</html>
